@@ -1,6 +1,6 @@
 const net = require('net');
 
-const ADDRESS = 10.62.0.46;
+const ADDRESS = '10.62.0.46';
 //get port number
 var PORT;
 if(process.argv[2]) {
