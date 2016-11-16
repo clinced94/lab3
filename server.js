@@ -25,7 +25,9 @@ server.on('connection', function(socket) {
 
 	socket.on('data', function(data) {
 
-		if(data.indexOf("JOIN_CHATROOM:") !== -1) {
+		var dataStr = data.toString();
+
+		if(dataStr.indexOf("JOIN_CHATROOM:") !== -1) {
 
 			var splitmsgData = splitMessageData(data);
 			console.log(splitmsgData);
