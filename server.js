@@ -18,7 +18,7 @@ var clients = [];
 
 var server = net.createServer();
 
-server.on('connection', function(socket)) {
+server.on('connection', function(socket) {
 
 	var socketAddress = socket.remoteAddress + ':' + socket.remotePort;
 	console.log('Connection established\n' + socketAddress + ' has connected');
@@ -52,7 +52,7 @@ server.on('connection', function(socket)) {
 
 		console.log('An error has occurred. \nDetails: ' + err.message);
 	});
-}
+});
 
 
 server.on('close', function() {
