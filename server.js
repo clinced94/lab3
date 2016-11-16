@@ -11,6 +11,8 @@ else {
 	PORT = 8000;
 }
 
+var clients = [];
+
 
 
 
@@ -22,6 +24,21 @@ server.on('connection', function(socket)) {
 	console.log('Connection established\n' + socketAddress + ' has connected');
 
 	socket.on('data', function(data) {
+
+		if(data.includes("JOIN_CHATROOM:")) {
+
+			var splitmsgData = splitMessageData(data);
+			console.log(splitmsgData);
+
+			clients.push(socket);
+
+			socket.write("Joined chatroom: " + splitmsgData[0].split(':')[1] + 
+				"\nSERVER_IP: " + ADDRESS + 
+				"\nPORT: " + PORT + 
+				"\nROOM_REF: " + "1" + 
+				"\nJOIN_ID: " + "123 " + "\n");
+
+		}
 
 	});
 
