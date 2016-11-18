@@ -25,7 +25,7 @@ server.on('connection', function(socket) {
 
 	socket.on('data', function(data) {
 
-		var dataStr = data.toString();
+		var dataStr = '' + data;
 
 		if(dataStr.indexOf("JOIN_CHATROOM:") !== -1) {
 
