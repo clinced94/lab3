@@ -25,11 +25,10 @@ server.on('connection', function(socket) {
 
 	socket.on('data', function(data) {
 
-		var dataStr = '' + data;
+		var splitmsgData = splitMessageData(data);
 
-		if(dataStr.indexOf("JOIN_CHATROOM:") !== -1) {
+		if(splitmsgdata.includes("JOIN_CHATROOM:")) {
 
-			var splitmsgData = splitMessageData(data);
 			console.log(splitmsgData);
 
 			clients.push(socket);
@@ -40,6 +39,21 @@ server.on('connection', function(socket) {
 				"\nROOM_REF: " + "1" + 
 				"\nJOIN_ID: " + "123 " + "\n");
 
+			clients.forEach(socket => socket.write(
+				"\nCLIENT_NAME" + splitmsgData[3].split(':')[1] + " has joined the chatroom"));
+
+		}
+		else if(splitmsgdata.includes("MESSAGE:")) {
+			
+			console.log(splitmsgData);
+			clients.forEach(socket => socket.write(splitmsgdata[0] + '\n' + 
+				splitmsgdata[2] + '\n' + splitmsgdata[3] + '\n\n'));
+		}
+		else if(splitmsgdata.includes('LEAVE_CHATROOM:')) {
+
+			clients.forEach(socket => socket.write('LEFT_CHATROOM: ' + 
+				splitmsgData[0].split(':')[1] + '\nJOIN_ID: ' + 
+				splitmsgData[1].split(':')[1]) + '\n');
 		}
 
 	});
