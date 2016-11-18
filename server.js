@@ -26,7 +26,7 @@ server.on('connection', function(socket) {
 
 	socket.on('data', function(data) {
 
-		var splitmsgData = splitMessageData(data);
+		var splitmsgdata = splitMessageData(data);
 
 		if(splitmsgdata.includes("JOIN_CHATROOM:")) {
 
