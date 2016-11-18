@@ -1,4 +1,5 @@
 const net = require('net');
+const os = require('os');
 
 const ADDRESS = '10.62.0.46';
 //get port number
@@ -39,21 +40,27 @@ server.on('connection', function(socket) {
 				"\nROOM_REF: " + "1" + 
 				"\nJOIN_ID: " + "123 " + "\n");
 
-			clients.forEach(socket => socket.write(
-				"\nCLIENT_NAME" + splitmsgData[3].split(':')[1] + " has joined the chatroom"));
+			clients.forEach(function(socket) { 
+				socket.write("\nCLIENT_NAME" + splitmsgData[3].split(':')[1] + 
+					" has joined the chatroom");
+		});
 
 		}
 		else if(splitmsgdata.includes("MESSAGE:")) {
 			
 			console.log(splitmsgData);
-			clients.forEach(socket => socket.write(splitmsgdata[0] + '\n' + 
-				splitmsgdata[2] + '\n' + splitmsgdata[3] + '\n\n'));
+			clients.forEach(function(socket) { 
+				socket.write(splitmsgdata[0] + '\n' + 
+				splitmsgdata[2] + '\n' + splitmsgdata[3] + '\n\n')
+			});
 		}
 		else if(splitmsgdata.includes('LEAVE_CHATROOM:')) {
 
-			clients.forEach(socket => socket.write('LEFT_CHATROOM: ' + 
+			clients.forEach(function(socket) {
+				socket.write('LEFT_CHATROOM: ' + 
 				splitmsgData[0].split(':')[1] + '\nJOIN_ID: ' + 
-				splitmsgData[1].split(':')[1]) + '\n');
+				splitmsgData[1].split(':')[1]) + '\n';
+			});
 		}
 
 	});
