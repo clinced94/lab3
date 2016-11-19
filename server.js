@@ -25,7 +25,11 @@ server.on('connection', function(socket) {
 	console.log('Connection established\n' + socketAddress + ' has connected');
 
 	socket.on("data", function(dat) {
-		if(dat.includes("JOIN_CHATROOM:")) {
+		
+		var d = "" + dat;
+		console.log(d);
+
+		if(d.includes("JOIN_CHATROOM:")) {
 			var splitmsgdat = splitMessagedata(dat);
 			console.log(splitmsgdata);
 
