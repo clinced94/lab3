@@ -24,39 +24,39 @@ server.on('connection', function(socket) {
 	var socketAddress = socket.remoteAddress + ':' + socket.remotePort;
 	console.log('Connection established\n' + socketAddress + ' has connected');
 
-	socket.on('data', function(data) {
-		if(data.toString().includes("JOIN_CHATROOM:")) {
-			var splitmsgdata = splitMessageData(data);
-			console.log(splitmsgData);
+	socket.on("data", function(dat) {
+		if(dat.includes("JOIN_CHATROOM:")) {
+			var splitmsgdat = splitMessagedata(dat);
+			console.log(splitmsgdata);
 
 			clients.push(socket);
 
-			socket.write("Joined chatroom: " + splitmsgData[0].split(':')[1] + 
-				"\nSERVER_IP: " + ADDRESS + 
-				"\nPORT: " + PORT + 
-				"\nROOM_REF: " + "1" + 
+			socket.write("Joined chatroom: " + splitmsgdata[0].split(':')[1] +
+				"\nSERVER_IP: " + ADDRESS +
+				"\nPORT: " + PORT +
+				"\nROOM_REF: " + "1" +
 				"\nJOIN_ID: " + "123 " + "\n");
 
-			clients.forEach(function(socket) { 
-				socket.write("\nCLIENT_NAME" + splitmsgData[3].split(':')[1] + 
+			clients.forEach(function(socket) {
+				socket.write("\nCLIENT_NAME" + splitmsgdata[3].split(':')[1] +
 					" has joined the chatroom");
 			});
 
 		}
-		else if(data.toString().includes("MESSAGE:")) {
-			var splitmsgdata = splitMessageData(data);
-			console.log(splitmsgData);
-			clients.forEach(function(socket) { 
-				socket.write(splitmsgdata[0] + '\n' + 
+		else if(dat.includes("MESSAGE:")) {
+			var splitmsgdata = splitMessagedata(dat);
+			console.log(splitmsgdat);
+			clients.forEach(function(socket) {
+				socket.write(splitmsgdata[0] + '\n' +
 				splitmsgdata[2] + '\n' + splitmsgdata[3] + '\n\n')
 			});
 		}
-		else if(data.toString().includes('LEAVE_CHATROOM:')) {
-			var splitmsgData = splitMessageData(data);
+		else if(dat.includes("LEAVE_CHATROOM:")) {
+			var splitmsgdata = splitMessagedata(dat);
 			clients.forEach(function(socket) {
-				socket.write('LEFT_CHATROOM: ' + 
-				splitmsgData[0].split(':')[1] + '\nJOIN_ID: ' + 
-				splitmsgData[1].split(':')[1]) + '\n';
+				socket.write('LEFT_CHATROOM: ' +
+				splitmsgdata[0].split(':')[1] + '\nJOIN_ID: ' +
+				splitmsgdata[1].split(':')[1]) + '\n';
 			});
 		}
 
@@ -93,11 +93,10 @@ server.listen(PORT, ADDRESS, function() {
 
 
 //split message by every new line, return as an array
-function splitMessageData(data) {
-	var messageData = '';
-	messageData += data;
-	var messageDataArray = messageData.split('\n');
+function splitMessagedat(dat) {
+	var messagedat = '';
+	messagedat += dat;
+	var messagedatArray = messagedat.split('\n');
 
-	return messageDataArray;
+	return messagedatArray;
 }
-
