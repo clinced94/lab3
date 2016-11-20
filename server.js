@@ -41,7 +41,7 @@ server.on('connection', function(socket) {
 
 				clients.forEach(function(socket) {
 
-					socket.write(splitmsgdata[0] + "\n" +
+					socket.write("CHAT:1" + "\n" +
 								splitmsgdata[2] + "\n" +
 								splitmsgdata[3] + "\n" +
 								"has joined the chatroom.\n");
