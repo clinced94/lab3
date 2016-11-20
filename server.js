@@ -12,6 +12,8 @@ else {
 	PORT = 8000;
 }
 
+var chatrooms = {};
+
 var clients = [];
 
 
@@ -40,40 +42,39 @@ server.on('connection', function(socket) {
 					"\nJOIN_ID: " + "123 " + "\n");
 
 				clients.forEach(function(socket) {
-					console.log(splitmsgdata[0].split(':')[1]);
-					console.log(splitmsgdata[3]);		
 					socket.write("CHAT:1\n" +
 								splitmsgdata[3] + "\n" +
 								"MESSAGE:" + splitmsgdata[3].split(':')[1] +
 								" has joined the chatroom.\n");
 
-					//socket.write("\nCLIENT_NAME:" + splitmsgdata[3].split(':')[1] +
-						//" has joined the chatroom\n\n\n");
 				});
-
-
-			}
 
 			else if(dat.includes("MESSAGE:")) {
 				var splitmsgdata = splitMessagedata(dat);
-				console.log(splitmsgdata);
 
 				clients.forEach(function(socket) {
-					socket.write("CHAT:1\n" +
+					socket.write(splitmsgdata[0] + "\n" +
 					splitmsgdata[2] + "\n" + splitmsgdata[3] + "\n\n")
 				});
 			}
+
 			else if(dat.includes("LEAVE_CHATROOM:")) {
+
 				var splitmsgdata = splitMessagedata(dat);
+				clients.splice(0,1);
+
 				clients.forEach(function(socket) {
 					socket.write('LEFT_CHATROOM: ' +
 					splitmsgdata[0].split(':')[1] + '\nJOIN_ID: ' +
 					splitmsgdata[1].split(':')[1]) + '\n';
 				});
 			}
+
 			else if(dat.includes("KILL_SERVICE")){
 				socket.destroy();
+				server.close();
 			}
+
 			else if (dat.includes("HELO")) {
 				socket.write(dat +
 					"IP:" + ADDRESS + "\n" +
@@ -112,6 +113,8 @@ server.listen(PORT, ADDRESS, function() {
 });
 
 
+
+function joiningChatroom(socket)
 
 //split message by every new line, return as an array
 function splitMessagedata(dat) {
