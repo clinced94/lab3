@@ -16,7 +16,6 @@ var clients = [];
 
 
 
-
 var server = net.createServer();
 
 server.on('connection', function(socket) {
@@ -25,10 +24,10 @@ server.on('connection', function(socket) {
 	console.log('Connection established\n' + socketAddress + ' has connected');
 
 	socket.on("data", function(dat) {
-		if(dat.includes("JOIN_CHATROOM:")) {
 
-			var splitmsgdata = splitMessagedata(dat);
-			console.log(splitmsgdata + "\n\n\n");
+		if(dat.includes("JOIN_CHATROOM:")) {
+			var splitmsgdat = splitMessagedata(dat);
+			console.log(splitmsgdata);
 
 			clients.push(socket);
 			//console.log(clients);
