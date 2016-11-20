@@ -1,7 +1,7 @@
 const net = require('net');
 const os = require('os');
 
-const ADDRESS = '10.62.0.46';
+const ADDRESS = 'localhost';
 //get port number
 var PORT;
 if(process.argv[2]) {
@@ -64,16 +64,25 @@ server.on('connection', function(socket) {
 				var splitmsgdata = splitMessagedata(dat);
 				console.log(splitmsgdata);
 
-				socket.write("LEFT_CHATROOM: " + splitmsgdata[0].split(':')[0] +"\n"
-					+ splitmsgdata[1] + "\n" + splitmsgdata[2] + "\n");
+				var roomRef = splitmsgdata[0].split(':')[1];
+				var joinId = splitmsgdata[1];
+				var clientName = splitmsgdata[2];
+
+				socket.write("LEFT_CHATROOM: " + roomRef +"\n"
+					+ joinId + "\n");
 
 				//clients.splice(0,1);
 
 				clients.forEach(function(socket) {
 					socket.write('LEFT_CHATROOM: ' +
-					splitmsgdata[0].split(':')[1] + '\nJOIN_ID: ' +
-					splitmsgdata[1].split(':')[1] + '\n');
+					roomRef + "\n" +
+					joinId + "\n" +
+					clientName + "\n");
 				});
+			}
+
+			else if(dat.includes("DISCONNECT:")) {
+				socket.destroy();
 			}
 
 			else if(dat.includes("KILL_SERVICE")){
