@@ -62,6 +62,8 @@ server.on('connection', function(socket) {
 			else if(dat.includes("LEAVE_CHATROOM:")) {
 
 				var splitmsgdata = splitMessagedata(dat);
+				console.log(splitmsgdata);
+
 				socket.write("LEFT_CHATROOM: " + splitmsgdata[0].split(':')[0] +"\n"
 					+ splitmsgdata[1] + "\n" + splitmsgdata[2] + "\n");
 
