@@ -1,7 +1,7 @@
 const net = require('net');
 const os = require('os');
 
-const ADDRESS = '10.62.0.46';
+const ADDRESS = 'localhost';
 //get port number
 var PORT;
 if(process.argv[2]) {
@@ -49,7 +49,7 @@ server.on('connection', function(socket) {
 
 			else if(dat.includes("MESSAGE:")) {
 				var splitmsgdata = splitMessagedata(dat);
-				//console.log(splitmsgdata);
+				console.log("DATA FROM MESSAGE: " + splitmsgdata);
 				clients.forEach(function(socket) {
 					socket.write(splitmsgdata[0] + "\n" +
 					splitmsgdata[2] + "\n" + splitmsgdata[3] + "\n\n")
@@ -62,6 +62,9 @@ server.on('connection', function(socket) {
 					splitmsgdata[0].split(':')[1] + '\nJOIN_ID: ' +
 					splitmsgdata[1].split(':')[1]) + '\n';
 				});
+			}
+			else if(dat.includes("KILL_SERVICE")){
+				socket.destroy();
 			}
 			else {
 				socket.write(dat + "data: lolololololol" );
