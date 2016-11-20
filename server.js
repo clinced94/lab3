@@ -25,41 +25,49 @@ server.on('connection', function(socket) {
 
 	socket.on("data", function(dat) {
 
-		if(dat.includes("JOIN_CHATROOM:")) {
-			var splitmsgdat = splitMessagedata(dat);
-			console.log(splitmsgdata);
+			if(dat.includes("JOIN_CHATROOM:")) {
 
-			clients.push(socket);
-			//console.log(clients);
+				var splitmsgdata = splitMessagedata(dat);
+				//console.log(splitmsgdata);
 
-			socket.write("Joined chatroom: " + splitmsgdata[0].split(':')[1] +
-				"\nSERVER_IP: " + ADDRESS +
-				"\nPORT: " + PORT +
-				"\nROOM_REF: " + "1" +
-				"\nJOIN_ID: " + "123 " + "\n");
+				clients.push(socket);
+				//console.log(clients);
 
-			clients.forEach(function(socket) {
-				socket.write("\nCLIENT_NAME:" + splitmsgdata[3].split(':')[1] +
-					" has joined the chatroom\n\n\n");
-			});
+				socket.write("Joined chatroom: " + splitmsgdata[0].split(':')[1] +
+					"\nSERVER_IP: " + ADDRESS +
+					"\nPORT: " + PORT +
+					"\nROOM_REF: " + "1" +
+					"\nJOIN_ID: " + "123 " + "\n");
 
-		}
-		else if(dat.includes("MESSAGE:")) {
-			var splitmsgdata = splitMessagedata(dat);
-			//console.log(splitmsgdata);
-			clients.forEach(function(socket) {
-				socket.write(splitmsgdata[0] + "\n" +
-				splitmsgdata[2] + "\n" + splitmsgdata[3] + "\n\n")
-			});
-		}
-		else if(dat.includes("LEAVE_CHATROOM:")) {
-			var splitmsgdata = splitMessagedata(dat);
-			clients.forEach(function(socket) {
-				socket.write('LEFT_CHATROOM: ' +
-				splitmsgdata[0].split(':')[1] + '\nJOIN_ID: ' +
-				splitmsgdata[1].split(':')[1]) + '\n';
-			});
-		}
+				clients.forEach(function(socket) {
+					socket.write("\nCLIENT_NAME:" + splitmsgdata[3].split(':')[1] +
+						" has joined the chatroom\n\n\n");
+				});
+
+
+			}
+
+			else if(dat.includes("MESSAGE:")) {
+				var splitmsgdata = splitMessagedata(dat);
+				//console.log(splitmsgdata);
+				clients.forEach(function(socket) {
+					socket.write(splitmsgdata[0] + "\n" +
+					splitmsgdata[2] + "\n" + splitmsgdata[3] + "\n\n")
+				});
+			}
+			else if(dat.includes("LEAVE_CHATROOM:")) {
+				var splitmsgdata = splitMessagedata(dat);
+				clients.forEach(function(socket) {
+					socket.write('LEFT_CHATROOM: ' +
+					splitmsgdata[0].split(':')[1] + '\nJOIN_ID: ' +
+					splitmsgdata[1].split(':')[1]) + '\n';
+				});
+			}
+			else {
+				socket.write(dat + "data: lolololololol" );
+				console.log("\n\n" + dat + "\n\n\n");
+			}
+
 
 	});
 
@@ -97,7 +105,7 @@ server.listen(PORT, ADDRESS, function() {
 function splitMessagedata(dat) {
 	var messagedata = '';
 	messagedata += dat;
-	var messagedataArray = messagedata.split('\n');
+	var messagedataArray = messagedata.split("\n");
 
 	return messagedataArray;
 }
