@@ -66,10 +66,11 @@ server.on('connection', function(socket) {
 			else if(dat.includes("KILL_SERVICE")){
 				socket.destroy();
 			}
-			else {
-				socket.write(dat + "data: lolololololol" );
-				console.log("\n\n" + dat + "\n\n\n");
-			}
+			else if (dat.includes("HELO")) {
+				socket.write(dat +
+					"IP:" + ADDRESS + "\n" +
+					"Port:" + port + "\n" +
+					"StudentID:133219802\n");
 
 
 	});
