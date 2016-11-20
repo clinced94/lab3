@@ -67,7 +67,7 @@ server.on('connection', function(socket) {
 				clients.forEach(function(socket) {
 					socket.write('LEFT_CHATROOM: ' +
 					splitmsgdata[0].split(':')[1] + '\nJOIN_ID: ' +
-					splitmsgdata[1].split(':')[1]) + '\n';
+					splitmsgdata[1].split(':')[1] + '\n');
 				});
 			}
 
@@ -115,7 +115,7 @@ server.listen(PORT, ADDRESS, function() {
 
 
 
-function joiningChatroom(socket)
+
 
 //split message by every new line, return as an array
 function splitMessagedata(dat) {
