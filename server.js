@@ -1,7 +1,7 @@
 const net = require('net');
 const os = require('os');
 
-const ADDRESS = '10.62.0.46';
+const ADDRESS = 'localhost';
 //get port number
 var PORT;
 if(process.argv[2]) {
@@ -26,10 +26,12 @@ server.on('connection', function(socket) {
 
 	socket.on("data", function(dat) {
 		if(dat.includes("JOIN_CHATROOM:")) {
-			var splitmsgdat = splitMessagedata(dat);
-			console.log(splitmsgdata);
+
+			var splitmsgdata = splitMessagedata(dat);
+			console.log(splitmsgdata + "\n\n\n");
 
 			clients.push(socket);
+			//console.log(clients);
 
 			socket.write("Joined chatroom: " + splitmsgdata[0].split(':')[1] +
 				"\nSERVER_IP: " + ADDRESS +
@@ -38,17 +40,17 @@ server.on('connection', function(socket) {
 				"\nJOIN_ID: " + "123 " + "\n");
 
 			clients.forEach(function(socket) {
-				socket.write("\nCLIENT_NAME" + splitmsgdata[3].split(':')[1] +
-					" has joined the chatroom");
+				socket.write("\nCLIENT_NAME:" + splitmsgdata[3].split(':')[1] +
+					" has joined the chatroom\n\n\n");
 			});
 
 		}
 		else if(dat.includes("MESSAGE:")) {
 			var splitmsgdata = splitMessagedata(dat);
-			console.log(splitmsgdat);
+			//console.log(splitmsgdata);
 			clients.forEach(function(socket) {
-				socket.write(splitmsgdata[0] + '\n' +
-				splitmsgdata[2] + '\n' + splitmsgdata[3] + '\n\n')
+				socket.write(splitmsgdata[0] + "\n" +
+				splitmsgdata[2] + "\n" + splitmsgdata[3] + "\n\n")
 			});
 		}
 		else if(dat.includes("LEAVE_CHATROOM:")) {
@@ -93,10 +95,10 @@ server.listen(PORT, ADDRESS, function() {
 
 
 //split message by every new line, return as an array
-function splitMessagedat(dat) {
-	var messagedat = '';
-	messagedat += dat;
-	var messagedatArray = messagedat.split('\n');
+function splitMessagedata(dat) {
+	var messagedata = '';
+	messagedata += dat;
+	var messagedataArray = messagedata.split('\n');
 
-	return messagedatArray;
+	return messagedataArray;
 }
