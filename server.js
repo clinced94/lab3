@@ -48,6 +48,7 @@ server.on('connection', function(socket) {
 								" has joined the chatroom.\n");
 
 				});
+			}
 
 			else if(dat.includes("MESSAGE:")) {
 				var splitmsgdata = splitMessagedata(dat);
