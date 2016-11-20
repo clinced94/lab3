@@ -69,9 +69,9 @@ server.on('connection', function(socket) {
 			else if (dat.includes("HELO")) {
 				socket.write(dat +
 					"IP:" + ADDRESS + "\n" +
-					"Port:" + port + "\n" +
+					"Port:" + PORT + "\n" +
 					"StudentID:133219802\n");
-
+			}
 
 	});
 
