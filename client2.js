@@ -15,7 +15,7 @@ socket.connect(PORT, HOST, function() {
 
 
     socket.write("LEAVE_CHATROOM:1\n" +
-        "JOIN_ID:123\n" +
+        "JOIN_ID:2\n" +
         "CLIENT_NAME:BroBiden\n\n");
 
   });

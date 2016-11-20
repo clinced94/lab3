@@ -12,9 +12,12 @@ else {
 	PORT = 8000;
 }
 
+
+//TODO: implement chatrooms
 var chatrooms = {};
 
 var clients = [];
+var join_id = 0;
 
 
 
@@ -32,17 +35,26 @@ server.on('connection', function(socket) {
 				var splitmsgdata = splitMessagedata(dat);
 				//console.log(splitmsgdata);
 
-				clients.push(socket);
-				//console.log(clients);
+				var roomRef = splitmsgdata[0].split(':')[1];
+				join_id ++;
+				if(!chatrooms.hasOwnProperty(roomRef)) {
+					chatrooms[roomRef] = [];
+					console.log("chatroom " + roomRef + " has been created.");
+					chatrooms[roomRef].push(socket);
+				}
+				else {
+					chatrooms[roomRef].push(socket);
+					console.log("chatroom" + roomRef + " clients: " + chatrooms[roomRef].length);
+				}
 
 				socket.write("JOINED_CHATROOM:" + splitmsgdata[0].split(':')[1] +
 					"\nSERVER_IP: " + ADDRESS +
 					"\nPORT: " + PORT +
-					"\nROOM_REF: " + "1" +
-					"\nJOIN_ID: " + "123 " + "\n");
+					"\nROOM_REF: " + roomRef +
+					"\nJOIN_ID: " + join_id + "\n");
 
-				clients.forEach(function(socket) {
-					socket.write("CHAT:1\n" +
+				chatrooms[roomRef].forEach(function(socket) {
+					socket.write("CHAT:" + roomRef + "\n" +
 								splitmsgdata[3] + "\n" +
 								"MESSAGE:" + splitmsgdata[3].split(':')[1] +
 								" has joined the chatroom.\n");
@@ -71,9 +83,7 @@ server.on('connection', function(socket) {
 				socket.write("LEFT_CHATROOM: " + roomRef +"\n"
 					+ joinId + "\n");
 
-				//clients.splice(0,1);
-
-				clients.forEach(function(socket) {
+				chatrooms[roomRef].forEach(function(socket) {
 					socket.write('LEFT_CHATROOM: ' +
 					roomRef + "\n" +
 					joinId + "\n" +
