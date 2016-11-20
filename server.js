@@ -40,11 +40,12 @@ server.on('connection', function(socket) {
 					"\nJOIN_ID: " + "123 " + "\n");
 
 				clients.forEach(function(socket) {
-
-					socket.write("CHAT:1" + "\n" +
-								splitmsgdata[2] + "\n" +
+					console.log(splitmsgdata[0].split(':')[1]);
+					console.log(splitmsgdata[3]);		
+					socket.write("CHAT:1\n" +
 								splitmsgdata[3] + "\n" +
-								"has joined the chatroom.\n");
+								"MESSAGE:" + splitmsgdata[3].split(':')[1] +
+								" has joined the chatroom.\n");
 
 					//socket.write("\nCLIENT_NAME:" + splitmsgdata[3].split(':')[1] +
 						//" has joined the chatroom\n\n\n");
