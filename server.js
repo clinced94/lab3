@@ -49,9 +49,10 @@ server.on('connection', function(socket) {
 
 			else if(dat.includes("MESSAGE:")) {
 				var splitmsgdata = splitMessagedata(dat);
-				console.log("DATA FROM MESSAGE: " + splitmsgdata);
+				console.log(splitmsgdata);
+
 				clients.forEach(function(socket) {
-					socket.write(splitmsgdata[0] + "\n" +
+					socket.write("CHAT:1\n" +
 					splitmsgdata[2] + "\n" + splitmsgdata[3] + "\n\n")
 				});
 			}
