@@ -1,6 +1,6 @@
 const net = require('net');
 
-const ADDRESS = '10.62.0.46';
+const ADDRESS = 'localhost';
 //get port number
 var PORT;
 if(process.argv[2]) {
@@ -48,21 +48,21 @@ server.on('connection', function(socket) {
 				socket.write("JOINED_CHATROOM:" + roomRef +
 					"\nSERVER_IP: " + ADDRESS +
 					"\nPORT: " + PORT +
-					"\nROOM_REF: " + "1" +
+					"\nROOM_REF: " + roomRef[roomRef.length - 1] +
 					"\nJOIN_ID: " + join_id + "\n");
 
 				chatrooms[roomRef].forEach(function(socket) {
-					socket.write("CHAT:" + "1" + "\n" +
+					socket.write("CHAT:" + roomRef[roomRef.length - 1] + "\n" +
 								splitData[3] + "\n" +
 								"MESSAGE:" + splitData[3].split(':')[1] +
-								" has joined the chatroom.\n\n");
+								" has joined this chatroom.\n\n");
 
 				});
 			}
 
 			else if(dat.includes("MESSAGE:")) {
 
-				var roomRef = "room" + splitData[0].split(':')[1];
+				var roomRef = " room" + splitData[0].split(':')[1];
 				chatrooms[roomRef].forEach(function(socket) {
 					socket.write(splitData[0] + "\n" +
 					splitData[2] + "\n" +
