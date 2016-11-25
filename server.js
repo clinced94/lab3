@@ -42,7 +42,7 @@ server.on('connection', function(socket) {
 				}
 				else {
 					chatrooms[roomRef].push(socket);
-					console.log("chatroom" + roomRef + " clients: " + chatrooms[roomRef].length);
+					//console.log("chatroom" + roomRef + " clients: " + chatrooms[roomRef].length);
 				}
 
 				socket.write("JOINED_CHATROOM:" + roomRef +
@@ -77,14 +77,14 @@ server.on('connection', function(socket) {
 				var roomRefNum = splitData[0].split(': ')[1];
 				console.log(roomRefNum + '\n\n');
 				var joinId = splitData[1].split(':')[1];
-				var clientName = splitData[2].split(':')[1];
+				var clientName = splitData[2].split(': ')[1];
 
 				socket.write('LEFT_CHATROOM: ' + roomRefNum + '\n' +
 					'JOIN_ID: ' + joinId + '\n');
 
 				chatrooms[roomRef].forEach(function(socket) {
 
-					socket.write('CHAT:' + roomRefNum + '\n' +
+					socket.write('CHAT:' + splitData[0].split(': ')[1] + '\n' +
 						'CLIENT_NAME:' + clientName + '\n' +
 						'MESSAGE:' + clientName + ' has left the chatroom\n\n');
 				});
