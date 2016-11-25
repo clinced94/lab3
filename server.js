@@ -72,7 +72,7 @@ server.on('connection', function(socket) {
 
 			else if(splitData[0].includes("LEAVE_CHATROOM:")) {
 
-				var roomRef = "room" + splitData[0].split(': ')[1];
+				var roomRef = " room" + splitData[0].split(': ')[1];
 				console.log(roomRef + '\n\n');
 				var roomRefNum = splitData[0].split(': ')[1];
 				var joinId = splitData[1].split(':')[1];
@@ -83,7 +83,7 @@ server.on('connection', function(socket) {
 
 				chatrooms[roomRef].forEach(function(socket) {
 
-					socket.write('CHAT: ' + roomRef + '\n' +
+					socket.write('CHAT: ' + roomRefNum + '\n' +
 						'CLIENT_NAME: ' + clientName + '\n' +
 						'MESSAGE: ' + clientName + ' has left the chatroom\n\n');
 				});
