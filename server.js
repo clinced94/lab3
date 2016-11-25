@@ -1,5 +1,4 @@
 const net = require('net');
-const os = require('os');
 
 const ADDRESS = '10.62.0.46';
 //get port number
@@ -30,10 +29,9 @@ server.on('connection', function(socket) {
 
 	socket.on("data", function(dat) {
 
-			if(dat.includes("JOIN_CHATROOM:")) {
+		var splitData = splitMessagedata(dat);
 
-				var splitmsgdata = splitMessagedata(dat);
-				//console.log(splitmsgdata);
+			if(splitData[0].includes("JOIN_CHATROOM:")) {
 
 				var roomRef = splitmsgdata[0].split(':')[1];
 				join_id ++;
@@ -57,38 +55,42 @@ server.on('connection', function(socket) {
 					socket.write("CHAT:" + "1" + "\n" +
 								splitmsgdata[3] + "\n" +
 								"MESSAGE:" + splitmsgdata[3].split(':')[1] +
-								" has joined the chatroom.\n");
+								" has joined the chatroom.\n\n");
 
 				});
 			}
 
 			else if(dat.includes("MESSAGE:")) {
-				var splitmsgdata = splitMessagedata(dat);
 
-				clients.forEach(function(socket) {
-					socket.write(splitmsgdata[0] + "\n" +
-					splitmsgdata[2] + "\n" + splitmsgdata[3] + "\n\n")
+				var roomRef = "room" + splitData[0].split(':')[1];
+				chatrooms[roomRef].forEach(function(socket) {
+					socket.write(splitData[0] + "\n" +
+					splitData[2] + "\n" +
+					splitData[3] + "\n\n")
 				});
 			}
 
-			else if(dat.includes("LEAVE_CHATROOM:")) {
+			else if(splitData[0].includes("LEAVE_CHATROOM:")) {
 
-				var splitmsgdata = splitMessagedata(dat);
-				console.log(splitmsgdata);
+				var roomRef = " room" + splitData[0].split(':')[1];
+				var roomRefNum = splitData[0].split(':')[1];
+				var joinId = splitData[1].split(':')[1];
+				var clientName = splitData[2].split(':')[1];
 
-				var roomRef = splitmsgdata[0].split(':')[1];
-				var joinId = splitmsgdata[1];
-				var clientName = splitmsgdata[2];
+				socket.write('LEFT_CHATROOM: ' + roomRef + '\n' +
+					'JOIN_ID: ' + joinId + '\n');
 
-				socket.write("LEFT_CHATROOM: " + roomRef +"\n"
-					+ joinId + "\n");
+				chatrooms[roomRefNum].forEach(function(socket) {
 
-				chatrooms[roomRef].forEach(function(socket) {
-					socket.write('LEFT_CHATROOM: ' +
-					roomRef + "\n" +
-					joinId + "\n" +
-					clientName + "\n");
+					socket.write('CHAT: ' + roomRef + '\n' +
+						'CLIENT_NAME: ' + clientName + '\n' +
+						'MESSAGE: ' + clientName + ' has left the chatroom\n\n');
 				});
+
+				if(chatrooms[roomRefNum].indexOf(socket) !== -1) {
+					chatrooms[roomRefNum].splice(chatrooms[roomRefNum].indexOf(socket), 1);
+				}
+				console.log('There are now ' + chatrooms[roomRefNum].length + ' left in ' + roomRef)
 			}
 
 			else if(dat.includes("DISCONNECT:")) {
