@@ -72,8 +72,9 @@ server.on('connection', function(socket) {
 
 			else if(splitData[0].includes("LEAVE_CHATROOM:")) {
 
-				var roomRef = "room" + splitData[0].split(':')[1];
-				var roomRefNum = splitData[0].split(':')[1];
+				var roomRef = "room" + splitData[0].split(': ')[1];
+				console.log(roomRef + '\n\n');
+				var roomRefNum = splitData[0].split(': ')[1];
 				var joinId = splitData[1].split(':')[1];
 				var clientName = splitData[2].split(':')[1];
 
