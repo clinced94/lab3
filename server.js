@@ -75,6 +75,7 @@ server.on('connection', function(socket) {
 				var roomRef = " room" + splitData[0].split(': ')[1];
 				console.log(roomRef + '\n\n');
 				var roomRefNum = splitData[0].split(': ')[1];
+				console.log(roomRefNum + '\n\n');
 				var joinId = splitData[1].split(':')[1];
 				var clientName = splitData[2].split(':')[1];
 
@@ -83,9 +84,9 @@ server.on('connection', function(socket) {
 
 				chatrooms[roomRef].forEach(function(socket) {
 
-					socket.write('CHAT: ' + roomRefNum + '\n' +
-						'CLIENT_NAME: ' + clientName + '\n' +
-						'MESSAGE: ' + clientName + ' has left the chatroom\n\n');
+					socket.write('CHAT:' + roomRefNum + '\n' +
+						'CLIENT_NAME:' + clientName + '\n' +
+						'MESSAGE:' + clientName + ' has left the chatroom\n\n');
 				});
 
 				if(chatrooms[roomRef].indexOf(socket) !== -1) {
