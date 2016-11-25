@@ -135,7 +135,6 @@ server.on('connection', function(socket) {
 	socket.on('close', function() {
 
 		console.log('Connection closed with ' + socketAddress);
-		server.close();
 	});
 
 	socket.on('error', function(err) {
