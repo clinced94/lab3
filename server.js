@@ -62,7 +62,7 @@ server.on('connection', function(socket) {
 
 			else if(dat.includes("MESSAGE:")) {
 
-				var roomRef = " room" + splitData[0].split(':')[1];
+				var roomRef = " room" + splitData[0].split(': ')[1];
 				chatrooms[roomRef].forEach(function(socket) {
 					socket.write(splitData[0] + "\n" +
 					splitData[2] + "\n" +
