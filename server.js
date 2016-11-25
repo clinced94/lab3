@@ -96,6 +96,25 @@ server.on('connection', function(socket) {
 			}
 
 			else if(dat.includes("DISCONNECT:")) {
+
+				var clientName = splitData[2].split(': ')[1];
+				var clientRooms = [];
+				for(var index in chatrooms) {
+					if(chatrooms.hasOwnProperty(index)) {
+						if(chatrooms[index].includes(socket)) {
+							clientRooms.push(index);
+						}
+					}
+				}
+
+				clientRooms.forEach(function(room) {
+					chatrooms[room].forEach(function(socket) {
+						socket.write('CHAT:' + room[room.length-1] + '\n' +
+						'CLIENT_NAME:' + clientName + '\n' +
+						'MESSAGE:' + clientName + ' has left this chatroom.\n\n');
+					});
+				});
+				socket.end();
 				socket.destroy();
 			}
 
